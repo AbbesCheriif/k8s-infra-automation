@@ -2,7 +2,6 @@ Vagrant.configure("2") do |config|
 
   config.vm.box = "ubuntu/jammy64"
 
-  # Réseau privé (important pour Kubernetes)
   NETWORK_PREFIX = "192.168.56"
 
   nodes = [
@@ -23,10 +22,10 @@ Vagrant.configure("2") do |config|
         vb.cpus = node[:cpus]
       end
 
-      node_config.vm.provision "shell", inline: <<-SHELL
-        apt-get update -y
-        apt-get install -y net-tools iputils-ping curl
-      SHELL
+      node_config.vm.provision "shell",
+        path: "./deploy.sh",
+        args: [node[:name],]
+
     end
   end
 end
